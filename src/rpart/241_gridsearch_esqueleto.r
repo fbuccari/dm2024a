@@ -108,8 +108,9 @@ archivo_salida <- "./exp/HT2020/gridsearch.txt"
 # genero la data.table donde van los resultados del Grid Search
 tb_grid_search <- data.table( max_depth = integer(),
                               min_split = integer(),
-                              ganancia_promedio = numeric() )
-
+                              min_bucket= integer(), 
+                              cp= integer(),
+                              ganancia_promedio = numeric())
 
 # itero por los loops anidados para cada hiperparametro
 
