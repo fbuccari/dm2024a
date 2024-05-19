@@ -13,12 +13,16 @@ require("rpart")
 PARAM <- list()
 PARAM$experimento <- 3510
 
+
+
+for (i in c(1,5, 10, 50, 100, 200, 500)) {
+setwd("~/buckets/b1/") # Establezco el Working Directory 
 # parameetros rpart
 PARAM$rpart_param <- list(
-  "cp" = -1,
-  "minsplit" = 50,
+  "cp" =-1,
+  "minsplit" = 250,
   "minbucket" = 10,
-  "maxdepth" = 10
+  "maxdepth" = 14
 )
 
 # parametros  arbol
@@ -27,13 +31,13 @@ PARAM$feature_fraction <- 0.5
 # voy a generar 500 arboles,
 #  a mas arboles mas tiempo de proceso y MEJOR MODELO,
 #  pero ganancias marginales
-PARAM$num_trees_max <- 1
+PARAM$num_trees_max <- i
 
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 # Aqui comienza el programa
 
-setwd("~/buckets/b1/") # Establezco el Working Directory
+
 
 #cargo MI semilla, que esta en MI bucket
 tabla_semillas <- fread( "./datasets//mis_semillas.txt" )
@@ -127,3 +131,6 @@ for (arbolito in 1:PARAM$num_trees_max) {
     cat(arbolito, " ")
   }
 }
+}
+
+
