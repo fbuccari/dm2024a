@@ -369,7 +369,7 @@ ZZ_final_base9 <- function( pinputexps )
 
 
   # default 5 semillas
-  param_local$qsemillas <- 5
+  param_local$qsemillas <- 20
 
   return( exp_correr_script( param_local ) ) # linea fija
 }
