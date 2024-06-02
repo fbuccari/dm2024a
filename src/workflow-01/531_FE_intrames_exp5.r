@@ -174,7 +174,97 @@ AgregarVariables_IntraMes <- function(dataset) {
   dataset[,minversiones_mprestamos:=minversiones+mprestamos]
   dataset[,minversiones_mprestamos_binaria:=ifelse((minversiones + mprestamos)>0,1,0)]
   
+  vnumerador=c(mrentabilidad,mrentabilidad_annual,mcomisiones,mactivos_margen,
+  mpasivos_margen,mcuenta_corriente,mcaja_ahorro,mcaja_ahorro_adicional, mcaja_ahorro_dolares,
+  mcuentas_saldo,mtarjeta_visa_consumo, mtarjeta_master_consumo, mprestamos_personales,
+  mprestamos_prendarios,mprestamos_hipotecarios,mplazo_fijo_dolares,mplazo_fijo_pesos,
+  minversion1_pesos,minversion1_dolares,minversion2,mpayroll,mpayroll2,mcuenta_debitos_automaticos,
+  mtarjeta_visa_debitos_automaticos,mttarjeta_master_debitos_automaticos,mpagodeservicios,
+  mpagomiscuentas,mcajeros_propios_descuentos,mtarjeta_visa_descuentos,mtarjeta_master_descuentos,
+  mcomisiones_mantenimiento,mcomisiones_otras,mforex_buy,mforex_sell,mtransferencias_recibidas,
+  mtransferencias_emitidas,mextraccion_autoservicio,mcheques_depositados,mcheques_emitidos,
+  mcheques_depositados_rechazados,mcheques_emitidos_rechazados,matm,matm_other,
+  Master_msaldototal,Master_msaldopesos,Master_msaldodolares,Master_mconsumospesos,
+  Master_mconsumosdolares,Master_mlimitecompra, aster_madelantopesos,Master_madelantodolares,
+  Master_mpagominimo,Visa_mfinanciacion_limite,Visa_msaldototal,Visa_msaldopesos,
+  Visa_msaldodolares,Visa_mconsumospesos,Visa_mconsumosdolares,Visa_mlimitecompra,
+  Visa_madelantopesos,Visa_madelantodolares,Visa_mpagado,Visa_mpagospesos,
+  Visa_mpagosdolares,Visa_mconsumototal,vm_mfinanciacion_limite,vm_msaldototal,
+  vm_msaldopesos,vm_msaldodolares,vm_mconsumospesos,vm_mconsumosdolares,vm_mlimitecompra,
+  vm_madelantopesos,vm_madelantodolares,vm_mpagado,vm_mpagospesos,vm_mpagosdolares,
+  vm_mconsumototal,vm_mpagominimo,total_consumo,total_seguros,minversiones,
+  mprestamos,sueldo_total,Master_mpagado,Master_mpagospesos,Master_mpagosdolares,Master_mconsumototal,Visa_mpagominimo)
   
+  vdenominador=c(cliente_edad,
+                 cliente_antiguedad,
+                 cproductos,
+                 tcuentas,
+                 ccuenta_corriente,
+                 ctarjeta_debito,
+                 ctarjeta_debito_transacciones,
+                 ctarjeta_visa,
+                 ctarjeta_visa_transacciones,
+                 ctarjeta_master,
+                 ctarjeta_master_transacciones,
+                 cprestamos_personales,
+                 cprestamos_prendarios,
+                 cprestamos_hipotecarios,
+                 cplazo_fijo,
+                 cinversion1,
+                 cinversion2,
+                 cseguro_vida,
+                 cseguro_auto,
+                 cseguro_vivienda,
+                 cseguro_accidentes_personales,
+                 cpayroll_trx,
+                 cpayroll2_trx,
+                 ccuenta_debitos_automaticos,
+                 ctarjeta_visa_debitos_automaticos,
+                 ctarjeta_master_debitos_automaticos,
+                 cpagodeservicios,
+                 cpagomiscuentas,
+                 ccajeros_propios_descuentos,
+                 ctarjeta_visa_descuentos,
+                 ctarjeta_master_descuentos,
+                 ccomisiones_mantenimiento,
+                 ccomisiones_otras,
+                 cforex,
+                 cforex_buy,
+                 cforex_sell,
+                 ctransferencias_recibidas,
+                 ctransferencias_emitidas,
+                 cextraccion_autoservicio,
+                 ccheques_depositados,
+                 ccheques_emitidos,
+                 ccheques_depositados_rechazados,
+                 ccheques_emitidos_rechazados,
+                 chomebanking_transacciones,
+                 ccajas_transacciones,
+                 ccajas_consultas,
+                 ccajas_depositos,
+                 ccajas_extracciones,
+                 ccajas_otras,
+                 catm_trx,
+                 catm_trx_other,
+                 ctrx_quarter,
+                 Master_cconsumos,
+                 Master_cadelantosefectivo,
+                 Visa_cconsumos,
+                 Visa_cadelantosefectivo,
+                 vm_cconsumos,
+                 vm_cadelantosefectivo)
+  
+  i=1
+  
+  for (num in vnumerador)
+  {
+    for (denom in vdenominador) {
+    cat(campo, " ")
+    dataset[, paste0("feintra", i) := 
+              (get(num)) / get(denom)]
+    }
+    i=i+1
+  }
   
   
   # valvula de seguridad para evitar valores infinitos
@@ -212,26 +302,6 @@ AgregarVariables_IntraMes <- function(dataset) {
     cat("Si no te gusta la decision, modifica a gusto el programa!\n\n")
     dataset[mapply(is.nan, dataset)] <<- 0
   }
-  
-  campos_buenos <- setdiff(
-    colnames(dataset),
-    c( "clase_ternaria")
-  )
-  
-  
-  
-  rf_model <- randomForest(x = data.matrix(dataset[, campos_buenos]), y = NULL, n_estimators= 20, proximity = TRUE, 
-                          min_samples_leaf=1000, max_depth = -1L) 
-  
-  # Obtener la matriz de proximidades
-  proximity_matrix <- rf_model$proximity
-  
-  # Convertir la matriz de proximidades en una matriz de distancias
-  distance_matrix <- 1 - proximity_matrix
-  
-  
- 
-  
   
   
   
